@@ -1,5 +1,6 @@
 package br.com.zupacademy.mercadolivre.dto.requests;
 
+import br.com.zupacademy.mercadolivre.annotations.UniqueValue;
 import br.com.zupacademy.mercadolivre.domains.SenhaLimpa;
 import br.com.zupacademy.mercadolivre.domains.Usuario;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -12,6 +13,7 @@ public class UsuarioRequest {
 
     @Email
     @NotBlank
+    @UniqueValue(domainClass = Usuario.class, fieldName = "login")
     private String login;
 
     /**
