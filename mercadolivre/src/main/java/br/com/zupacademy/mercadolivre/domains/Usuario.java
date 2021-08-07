@@ -1,5 +1,7 @@
 package br.com.zupacademy.mercadolivre.domains;
 
+import br.com.zupacademy.mercadolivre.domains.treatments.SenhaLimpa;
+
 import javax.persistence.*;
 import javax.validation.constraints.*;
 import java.time.LocalDateTime;
@@ -23,6 +25,10 @@ public class Usuario {
     @NotNull
     @PastOrPresent
     private LocalDateTime dataDeCadastro = LocalDateTime.now();
+
+    @Deprecated
+    public Usuario() {
+    }
 
     /**
      * @param senhaLimpa - String em texto puro, sem criptografia.

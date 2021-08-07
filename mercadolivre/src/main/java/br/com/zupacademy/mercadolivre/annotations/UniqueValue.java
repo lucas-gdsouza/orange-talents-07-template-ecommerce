@@ -9,7 +9,7 @@ import java.lang.annotation.*;
 @Target({ElementType.FIELD})
 @Retention(RetentionPolicy.RUNTIME)
 public @interface UniqueValue {
-    String message() default "{br.com.zupacademy.mercadolivre.annotations.uniqueValue}";
+    String message() default "{br.com.zupacademy.mercadolivre.annotations.UniqueValue}";
 
     Class<?>[] groups() default {};
 

@@ -1,4 +1,4 @@
-package br.com.zupacademy.mercadolivre.domains;
+package br.com.zupacademy.mercadolivre.domains.treatments;
 
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
