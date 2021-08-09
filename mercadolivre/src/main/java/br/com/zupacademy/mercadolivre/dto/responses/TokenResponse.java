@@ -9,4 +9,12 @@ public class TokenResponse {
         this.token = token;
         this.tipo = tipo;
     }
+
+    public String getToken() {
+        return token;
+    }
+
+    public String getTipo() {
+        return tipo;
+    }
 }

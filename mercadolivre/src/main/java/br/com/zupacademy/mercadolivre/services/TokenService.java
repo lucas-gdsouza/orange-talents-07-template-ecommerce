@@ -1,6 +1,7 @@
 package br.com.zupacademy.mercadolivre.services;
 
 import br.com.zupacademy.mercadolivre.domains.Usuario;
+import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import org.springframework.beans.factory.annotation.Value;
@@ -18,6 +19,10 @@ public class TokenService {
     @Value("${api.jwt.secret}")
     private String secret;
 
+    public Long getIdUsuario(String token) {
+        Claims claims = Jwts.parser().setSigningKey(secret).parseClaimsJws(token).getBody();
+        return Long.valueOf(claims.getSubject());
+    }
 
     public String gerarToken(Authentication authentication) {
         Usuario usuarioLogado = (Usuario) authentication.getPrincipal();
@@ -31,5 +36,14 @@ public class TokenService {
                 .setExpiration(dataExpiracao)
                 .signWith(SignatureAlgorithm.HS256, secret)
                 .compact();
+    }
+
+    public boolean isTokenValido(String token) {
+        try {
+            Jwts.parser().setSigningKey(secret).parseClaimsJws(token);
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
     }
 }
