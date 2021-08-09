@@ -1,5 +1,6 @@
-package br.com.zupacademy.mercadolivre.annotations;
+package br.com.zupacademy.mercadolivre.annotations.impl;
 
+import br.com.zupacademy.mercadolivre.annotations.UniqueValue;
 import org.springframework.util.Assert;
 
 import javax.persistence.EntityManager;

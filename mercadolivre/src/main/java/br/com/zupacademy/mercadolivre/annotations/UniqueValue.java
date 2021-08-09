@@ -1,5 +1,7 @@
 package br.com.zupacademy.mercadolivre.annotations;
 
+import br.com.zupacademy.mercadolivre.annotations.impl.UniqueValueValidator;
+
 import javax.validation.Constraint;
 import javax.validation.Payload;
 import java.lang.annotation.*;

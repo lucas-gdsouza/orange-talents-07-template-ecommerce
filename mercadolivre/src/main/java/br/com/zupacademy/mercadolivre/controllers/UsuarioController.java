@@ -1,7 +1,7 @@
 package br.com.zupacademy.mercadolivre.controllers;
 
 import br.com.zupacademy.mercadolivre.domains.Usuario;
-import br.com.zupacademy.mercadolivre.dto.requests.UsuarioRequest;
+import br.com.zupacademy.mercadolivre.dto.requests.CadastroUsuarioRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -22,7 +22,7 @@ public class UsuarioController {
 
     @PostMapping
     @Transactional
-    public ResponseEntity salvar(@RequestBody @Valid UsuarioRequest request) {
+    public ResponseEntity salvar(@RequestBody @Valid CadastroUsuarioRequest request) {
         Usuario usuario = request.toModel();
         manager.persist(usuario);
 

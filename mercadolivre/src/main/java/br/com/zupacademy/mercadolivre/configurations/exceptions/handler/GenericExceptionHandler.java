@@ -1,5 +1,6 @@
-package br.com.zupacademy.mercadolivre.configurations;
+package br.com.zupacademy.mercadolivre.configurations.exceptions.handler;
 
+import br.com.zupacademy.mercadolivre.configurations.exceptions.dto.GenericExceptionDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;

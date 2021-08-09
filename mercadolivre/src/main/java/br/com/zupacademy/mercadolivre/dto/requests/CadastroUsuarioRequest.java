@@ -9,7 +9,7 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
-public class UsuarioRequest {
+public class CadastroUsuarioRequest {
 
     @Email
     @NotBlank
@@ -25,7 +25,7 @@ public class UsuarioRequest {
     @Size(min = 6)
     private String senhaLimpa;
 
-    public UsuarioRequest(@Email @NotBlank String login, @NotBlank @Size(min = 6) @JsonProperty("senha") String senhaLimpa) {
+    public CadastroUsuarioRequest(@Email @NotBlank String login, @NotBlank @Size(min = 6) @JsonProperty("senha") String senhaLimpa) {
         this.login = login;
         this.senhaLimpa = senhaLimpa;
     }

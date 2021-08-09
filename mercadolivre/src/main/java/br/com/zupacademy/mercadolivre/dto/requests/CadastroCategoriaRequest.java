@@ -7,7 +7,7 @@ import javax.persistence.EntityManager;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Positive;
 
-public class CategoriaRequest {
+public class CadastroCategoriaRequest {
 
     @NotBlank
     @UniqueValue(domainClass = Categoria.class, fieldName = "nome")
@@ -16,7 +16,7 @@ public class CategoriaRequest {
     @Positive
     private Long id_categoria_mae;
 
-    public CategoriaRequest(@NotBlank String nome, @Positive Long id_categoria_mae) {
+    public CadastroCategoriaRequest(@NotBlank String nome, @Positive Long id_categoria_mae) {
         this.nome = nome;
         this.id_categoria_mae = id_categoria_mae;
     }

@@ -1,7 +1,7 @@
 package br.com.zupacademy.mercadolivre.controllers;
 
 import br.com.zupacademy.mercadolivre.domains.Categoria;
-import br.com.zupacademy.mercadolivre.dto.requests.CategoriaRequest;
+import br.com.zupacademy.mercadolivre.dto.requests.CadastroCategoriaRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -22,7 +22,7 @@ public class CategoriaController {
 
     @PostMapping
     @Transactional
-    public ResponseEntity salvar(@RequestBody @Valid CategoriaRequest request) {
+    public ResponseEntity salvar(@RequestBody @Valid CadastroCategoriaRequest request) {
         Categoria categoria = request.toModel(manager);
         manager.persist(categoria);
 

@@ -1,4 +1,4 @@
-package br.com.zupacademy.mercadolivre.configurations;
+package br.com.zupacademy.mercadolivre.configurations.exceptions.dto;
 
 public class GenericExceptionDTO {
 
