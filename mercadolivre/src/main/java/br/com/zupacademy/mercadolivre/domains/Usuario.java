@@ -54,6 +54,10 @@ public class Usuario implements UserDetails {
         }
     }
 
+    public Long getId() {
+        return id;
+    }
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return Collections.emptyList();

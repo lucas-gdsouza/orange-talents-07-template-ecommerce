@@ -1,4 +1,4 @@
-package br.com.zupacademy.mercadolivre.configurations.security;
+package br.com.zupacademy.mercadolivre.services;
 
 import br.com.zupacademy.mercadolivre.domains.Usuario;
 import br.com.zupacademy.mercadolivre.repositories.UsuarioRepository;

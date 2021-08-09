@@ -1,4 +1,4 @@
-package br.com.zupacademy.mercadolivre.annotations.impl;
+package br.com.zupacademy.mercadolivre.annotations;
 
 import br.com.zupacademy.mercadolivre.annotations.UniqueValue;
 import org.springframework.util.Assert;
