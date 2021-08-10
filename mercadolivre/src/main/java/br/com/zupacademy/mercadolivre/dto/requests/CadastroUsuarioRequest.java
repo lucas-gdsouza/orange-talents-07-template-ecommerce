@@ -7,6 +7,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 public class CadastroUsuarioRequest {
@@ -19,18 +20,18 @@ public class CadastroUsuarioRequest {
     /**
      * @param senhaLimpa - Texto puro, sem criptografia, recebido via Request.
      */
-
     @JsonProperty("senha")
     @NotBlank
     @Size(min = 6)
     private String senhaLimpa;
 
-    public CadastroUsuarioRequest(@Email @NotBlank String login, @NotBlank @Size(min = 6) @JsonProperty("senha") String senhaLimpa) {
+    public CadastroUsuarioRequest(@Email @NotBlank String login,
+                                  @NotBlank @Size(min = 6) @JsonProperty("senha") String senhaLimpa) {
         this.login = login;
         this.senhaLimpa = senhaLimpa;
     }
 
-    public Usuario toModel() {
+    public @NotNull Usuario toModel() {
         return new Usuario(this.login, new SenhaLimpa(this.senhaLimpa));
     }
 }

@@ -1,5 +1,7 @@
 package br.com.zupacademy.mercadolivre.domains;
 
+import io.jsonwebtoken.lang.Assert;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 
@@ -17,11 +19,14 @@ public class Categoria {
     @ManyToOne
     private Categoria categoriaMae;
 
+    /**
+     * @Deprecated - Para uso do Hibernate
+     */
     @Deprecated
-    public Categoria(){}
+    public Categoria() {
+    }
 
     /**
-     *
      * @param nome - Obrigatório
      */
     public Categoria(@NotBlank String nome) {
@@ -30,7 +35,6 @@ public class Categoria {
     }
 
     /**
-     *
      * @param categoriaMae - Opcional
      */
     public void setCategoriaMae(Categoria categoriaMae) {
@@ -38,8 +42,6 @@ public class Categoria {
     }
 
     private void validarArgumentos(String nome) {
-        if (nome == null || nome.trim().equals("")) {
-            throw new IllegalArgumentException("Argumento 'nome' não pode ser null ou vazio");
-        }
+        Assert.hasText(nome, "Argumento 'nome' precisa ser preenchido.");
     }
 }

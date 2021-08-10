@@ -1,5 +1,6 @@
 package br.com.zupacademy.mercadolivre.domains.treatments;
 
+import io.jsonwebtoken.lang.Assert;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import javax.validation.constraints.NotBlank;
@@ -15,9 +16,7 @@ public class SenhaLimpa {
     }
 
     private void validarArgumentos(String senha) {
-        if (senha == null || senha.trim().equals("")) {
-            throw new IllegalArgumentException("Argumento 'senha' não pode ser null ou vazio");
-        }
+        Assert.hasText(senha, "Argumento 'senha' precisa ser preenchido.");
     }
 
     public @NotBlank @Size(min = 6) String hash() {

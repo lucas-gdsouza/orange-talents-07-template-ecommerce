@@ -5,6 +5,7 @@ import br.com.zupacademy.mercadolivre.domains.Categoria;
 
 import javax.persistence.EntityManager;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
 
 public class CadastroCategoriaRequest {
@@ -21,7 +22,7 @@ public class CadastroCategoriaRequest {
         this.id_categoria_mae = id_categoria_mae;
     }
 
-    public Categoria toModel(EntityManager manager) {
+    public @NotNull Categoria toModel(EntityManager manager) {
         Categoria categoria = new Categoria(this.nome);
 
         if (id_categoria_mae != null) {

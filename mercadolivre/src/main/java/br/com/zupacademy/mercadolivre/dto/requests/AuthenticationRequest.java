@@ -5,6 +5,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 public class AuthenticationRequest {
@@ -18,15 +19,15 @@ public class AuthenticationRequest {
 
     @JsonProperty("senha")
     @NotBlank
-    @Size(min = 6)
     private String senhaLimpa;
 
-    public AuthenticationRequest(@Email @NotBlank String login, @NotBlank @Size(min = 6) @JsonProperty("senha") String senhaLimpa) {
+    public AuthenticationRequest(@Email @NotBlank String login,
+                                 @NotBlank @JsonProperty("senha") String senhaLimpa) {
         this.login = login;
         this.senhaLimpa = senhaLimpa;
     }
 
-    public UsernamePasswordAuthenticationToken converter(){
+    public @NotNull UsernamePasswordAuthenticationToken converter() {
         return new UsernamePasswordAuthenticationToken(this.login, this.senhaLimpa);
     }
 }

@@ -1,6 +1,7 @@
 package br.com.zupacademy.mercadolivre.domains;
 
 import br.com.zupacademy.mercadolivre.domains.treatments.SenhaLimpa;
+import io.jsonwebtoken.lang.Assert;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -30,6 +31,9 @@ public class Usuario implements UserDetails {
     @PastOrPresent
     private LocalDateTime dataDeCadastro = LocalDateTime.now();
 
+    /**
+     * @Deprecated - Para uso do Hibernate
+     */
     @Deprecated
     public Usuario() {
     }
@@ -45,13 +49,8 @@ public class Usuario implements UserDetails {
     }
 
     private void validarArgumentos(String login, SenhaLimpa senhaLimpa) {
-        if (login == null || login.trim().equals("")) {
-            throw new IllegalArgumentException("Argumento 'login' não pode ser null ou vazio");
-        }
-
-        if (senhaLimpa == null) {
-            throw new IllegalArgumentException("Argumento 'senha' não pode ser null");
-        }
+        Assert.hasText(login, "Argumento 'login' precisa ser preenchido.");
+        Assert.notNull(senhaLimpa, "Argumento 'senha' não pode ser null");
     }
 
     public Long getId() {
@@ -91,15 +90,5 @@ public class Usuario implements UserDetails {
     @Override
     public boolean isEnabled() {
         return true;
-    }
-
-    @Override
-    public String toString() {
-        return "Usuario{" +
-                "id=" + id +
-                ", login='" + login + '\'' +
-                ", senha='" + senha + '\'' +
-                ", dataDeCadastro=" + dataDeCadastro +
-                '}';
     }
 }

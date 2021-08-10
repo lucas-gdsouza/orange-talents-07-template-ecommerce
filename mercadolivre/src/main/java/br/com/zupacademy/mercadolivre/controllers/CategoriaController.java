@@ -26,6 +26,8 @@ public class CategoriaController {
         Categoria categoria = request.toModel(manager);
         manager.persist(categoria);
 
+        System.out.println(categoria.toString());
+
         return ResponseEntity.ok().build();
     }
 }
