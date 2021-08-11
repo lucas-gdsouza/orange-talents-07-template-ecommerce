@@ -49,6 +49,9 @@ public class Produto {
     @Valid
     private Categoria categoria;
 
+    @OneToMany(mappedBy = "produto", cascade = CascadeType.MERGE)
+    private Set<ImagemProduto> imagens = new HashSet<>();
+
     private LocalDate dataCadastro = LocalDate.now();
 
     @Deprecated
@@ -97,5 +100,42 @@ public class Produto {
         Assert.hasText(descricao, "O argumento 'descricao' deve ser preenchido.");
 
         Assert.notNull(categoria, "O argumento 'categoria' não pode ser null");
+    }
+
+    public void associaImagens(Set<String> links) {
+        Set<ImagemProduto> imagens = links.stream()
+                .map(link -> new ImagemProduto(this, link))
+                .collect(Collectors.toSet());
+
+        this.imagens.addAll(imagens);
+    }
+
+    public boolean verificacaoOwnership(Usuario possivelDono) {
+        return this.usuario.equals(possivelDono);
+    }
+
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + ((nome == null) ? 0 : nome.hashCode());
+        return result;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        Produto other = (Produto) obj;
+        if (nome == null) {
+            if (other.nome != null)
+                return false;
+        } else if (!nome.equals(other.nome))
+            return false;
+        return true;
     }
 }
