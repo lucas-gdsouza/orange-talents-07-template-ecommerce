@@ -27,8 +27,6 @@ public class Usuario implements UserDetails {
     @Size(min = 6)
     private String senha;
 
-    @NotNull
-    @PastOrPresent
     private LocalDateTime dataDeCadastro = LocalDateTime.now();
 
     /**
