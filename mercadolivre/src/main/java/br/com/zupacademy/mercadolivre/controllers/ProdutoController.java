@@ -1,10 +1,13 @@
 package br.com.zupacademy.mercadolivre.controllers;
 
+import br.com.zupacademy.mercadolivre.components.EmailFake;
 import br.com.zupacademy.mercadolivre.components.UploaderFake;
 import br.com.zupacademy.mercadolivre.domains.Opiniao;
+import br.com.zupacademy.mercadolivre.domains.Pergunta;
 import br.com.zupacademy.mercadolivre.domains.Produto;
 import br.com.zupacademy.mercadolivre.domains.Usuario;
 import br.com.zupacademy.mercadolivre.dto.requests.CadastrarOpiniaoRequest;
+import br.com.zupacademy.mercadolivre.dto.requests.CadastrarPerguntaRequest;
 import br.com.zupacademy.mercadolivre.dto.requests.CadastroProdutoRequest;
 import br.com.zupacademy.mercadolivre.dto.requests.NovasImagensRequest;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +21,6 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.transaction.Transactional;
 import javax.validation.Valid;
-import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
@@ -31,6 +33,9 @@ public class ProdutoController {
 
     @Autowired
     private UploaderFake uploaderFake;
+
+    @Autowired
+    private EmailFake emailFake;
 
     @PostMapping
     @Transactional
@@ -80,8 +85,8 @@ public class ProdutoController {
 
     @PostMapping(value = "/{id}/opinioes")
     @Transactional
-    public ResponseEntity salvar(@PathVariable("id") Long id, @RequestBody @Valid CadastrarOpiniaoRequest request,
-                                 @AuthenticationPrincipal Optional usuarioPrincipal) {
+    public ResponseEntity salvarOpinioes(@PathVariable("id") Long id, @RequestBody @Valid CadastrarOpiniaoRequest request,
+                                         @AuthenticationPrincipal Optional usuarioPrincipal) {
 
         if (usuarioPrincipal.isEmpty()) {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN);
@@ -90,12 +95,37 @@ public class ProdutoController {
         Usuario usuario = (Usuario) usuarioPrincipal.get();
         Produto produto = manager.find(Produto.class, id);
 
-        if(produto == null){
+        if (produto == null) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
         }
 
         Opiniao opiniao = request.toModel(usuario, produto);
         manager.persist(opiniao);
+
+        return ResponseEntity.ok().build();
+    }
+
+    @PostMapping(value = "/{id}/perguntas")
+    @Transactional
+    public ResponseEntity salvarPerguntas(@PathVariable("id") Long id,
+                                          @RequestBody @Valid CadastrarPerguntaRequest request,
+                                          @AuthenticationPrincipal Optional usuarioPrincipal) {
+
+        if (usuarioPrincipal.isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN);
+        }
+
+        Usuario usuario = (Usuario) usuarioPrincipal.get();
+        Produto produto = manager.find(Produto.class, id);
+
+        if (produto == null) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
+        }
+
+        Pergunta pergunta = request.toModel(usuario, produto);
+        manager.persist(pergunta);
+
+        emailFake.enviarEmail(pergunta);
 
         return ResponseEntity.ok().build();
     }

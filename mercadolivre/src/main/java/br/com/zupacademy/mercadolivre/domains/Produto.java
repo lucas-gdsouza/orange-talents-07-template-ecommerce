@@ -114,6 +114,10 @@ public class Produto {
         return this.usuario.equals(possivelDono);
     }
 
+    public Usuario getUsuario() {
+        return usuario;
+    }
+
     @Override
     public int hashCode() {
         final int prime = 31;
