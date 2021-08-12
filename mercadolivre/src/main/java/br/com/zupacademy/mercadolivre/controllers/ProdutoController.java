@@ -1,8 +1,10 @@
 package br.com.zupacademy.mercadolivre.controllers;
 
 import br.com.zupacademy.mercadolivre.components.UploaderFake;
+import br.com.zupacademy.mercadolivre.domains.Opiniao;
 import br.com.zupacademy.mercadolivre.domains.Produto;
 import br.com.zupacademy.mercadolivre.domains.Usuario;
+import br.com.zupacademy.mercadolivre.dto.requests.CadastrarOpiniaoRequest;
 import br.com.zupacademy.mercadolivre.dto.requests.CadastroProdutoRequest;
 import br.com.zupacademy.mercadolivre.dto.requests.NovasImagensRequest;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -63,7 +65,7 @@ public class ProdutoController {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
         }
 
-        if (!produto.verificacaoOwnership(usuarioLogado)) {
+        if (usuarioPrincipal.isEmpty() || !produto.verificacaoOwnership(usuarioLogado)) {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN);
         }
 
@@ -72,6 +74,28 @@ public class ProdutoController {
         produto.associaImagens(links);
 
         manager.merge(produto);
+
+        return ResponseEntity.ok().build();
+    }
+
+    @PostMapping(value = "/{id}/opinioes")
+    @Transactional
+    public ResponseEntity salvar(@PathVariable("id") Long id, @RequestBody @Valid CadastrarOpiniaoRequest request,
+                                 @AuthenticationPrincipal Optional usuarioPrincipal) {
+
+        if (usuarioPrincipal.isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN);
+        }
+
+        Usuario usuario = (Usuario) usuarioPrincipal.get();
+        Produto produto = manager.find(Produto.class, id);
+
+        if(produto == null){
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
+        }
+
+        Opiniao opiniao = request.toModel(usuario, produto);
+        manager.persist(opiniao);
 
         return ResponseEntity.ok().build();
     }
