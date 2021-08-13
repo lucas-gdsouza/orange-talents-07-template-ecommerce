@@ -7,7 +7,7 @@ import br.com.zupacademy.mercadolivre.domains.Usuario;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
-public class CadastrarPerguntaRequest {
+public class CadastroPerguntaRequest {
 
     @NotBlank
     private String titulo;

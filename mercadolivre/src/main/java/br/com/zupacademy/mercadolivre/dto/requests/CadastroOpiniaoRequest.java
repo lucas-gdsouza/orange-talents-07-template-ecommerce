@@ -6,7 +6,7 @@ import br.com.zupacademy.mercadolivre.domains.Usuario;
 
 import javax.validation.constraints.*;
 
-public class CadastrarOpiniaoRequest {
+public class CadastroOpiniaoRequest {
 
     @Min(1)
     @Max(5)
@@ -21,8 +21,8 @@ public class CadastrarOpiniaoRequest {
     private String descricao;
 
 
-    public CadastrarOpiniaoRequest(@Size(min = 1, max = 5) Integer nota, @NotBlank String titulo,
-                                   @NotBlank String descricao) {
+    public CadastroOpiniaoRequest(@Size(min = 1, max = 5) Integer nota, @NotBlank String titulo,
+                                  @NotBlank String descricao) {
         this.nota = nota;
         this.titulo = titulo;
         this.descricao = descricao;

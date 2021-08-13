@@ -59,16 +59,28 @@ public class Opiniao {
         Assert.notNull(produto, "O argumento 'produto' não pode ser null");
     }
 
+    public Integer getNota() {
+        return nota;
+    }
+
+    public String getTitulo() {
+        return titulo;
+    }
+
+    public String getDescricao() {
+        return descricao;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof Opiniao)) return false;
         Opiniao opiniao = (Opiniao) o;
-        return titulo.equals(opiniao.titulo);
+        return titulo.equals(opiniao.titulo) && usuario.equals(opiniao.usuario);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(titulo);
+        return Objects.hash(titulo, usuario);
     }
 }

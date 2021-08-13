@@ -6,10 +6,11 @@ import br.com.zupacademy.mercadolivre.domains.Opiniao;
 import br.com.zupacademy.mercadolivre.domains.Pergunta;
 import br.com.zupacademy.mercadolivre.domains.Produto;
 import br.com.zupacademy.mercadolivre.domains.Usuario;
-import br.com.zupacademy.mercadolivre.dto.requests.CadastrarOpiniaoRequest;
-import br.com.zupacademy.mercadolivre.dto.requests.CadastrarPerguntaRequest;
+import br.com.zupacademy.mercadolivre.dto.requests.CadastroOpiniaoRequest;
+import br.com.zupacademy.mercadolivre.dto.requests.CadastroPerguntaRequest;
 import br.com.zupacademy.mercadolivre.dto.requests.CadastroProdutoRequest;
 import br.com.zupacademy.mercadolivre.dto.requests.NovasImagensRequest;
+import br.com.zupacademy.mercadolivre.dto.responses.DetalhesDoProdutoResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -37,10 +38,21 @@ public class ProdutoController {
     @Autowired
     private EmailFake emailFake;
 
+    @GetMapping(value = "/{id}")
+    public DetalhesDoProdutoResponse capturarInformacoes(@PathVariable("id") Long id) {
+        Produto produto = manager.find(Produto.class, id);
+
+        if (produto == null) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
+        }
+
+        return new DetalhesDoProdutoResponse(produto);
+    }
+
     @PostMapping
     @Transactional
-    public ResponseEntity salvar(@RequestBody @Valid CadastroProdutoRequest request,
-                                 @AuthenticationPrincipal Optional usuarioPrincipal) {
+    public ResponseEntity salvarProduto(@RequestBody @Valid CadastroProdutoRequest request,
+                                        @AuthenticationPrincipal Optional usuarioPrincipal) {
 
         Usuario usuario = (Usuario) usuarioPrincipal.get();
 
@@ -85,7 +97,7 @@ public class ProdutoController {
 
     @PostMapping(value = "/{id}/opinioes")
     @Transactional
-    public ResponseEntity salvarOpinioes(@PathVariable("id") Long id, @RequestBody @Valid CadastrarOpiniaoRequest request,
+    public ResponseEntity salvarOpinioes(@PathVariable("id") Long id, @RequestBody @Valid CadastroOpiniaoRequest request,
                                          @AuthenticationPrincipal Optional usuarioPrincipal) {
 
         if (usuarioPrincipal.isEmpty()) {
@@ -108,7 +120,7 @@ public class ProdutoController {
     @PostMapping(value = "/{id}/perguntas")
     @Transactional
     public ResponseEntity salvarPerguntas(@PathVariable("id") Long id,
-                                          @RequestBody @Valid CadastrarPerguntaRequest request,
+                                          @RequestBody @Valid CadastroPerguntaRequest request,
                                           @AuthenticationPrincipal Optional usuarioPrincipal) {
 
         if (usuarioPrincipal.isEmpty()) {

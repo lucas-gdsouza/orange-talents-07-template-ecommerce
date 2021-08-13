@@ -29,7 +29,7 @@ public class CadastroCaracteristicaRequest {
     }
 
     public CaracteristicaProduto toModel(@NotNull @Valid Produto produto) {
-        return new CaracteristicaProduto(nome, descricao, produto);
+        return new CaracteristicaProduto(this.nome, this.descricao, produto);
     }
 
     @Override

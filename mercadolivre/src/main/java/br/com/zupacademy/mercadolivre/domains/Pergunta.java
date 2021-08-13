@@ -7,10 +7,11 @@ import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 @Entity
 @Table(name = "Perguntas")
-public class Pergunta {
+public class Pergunta implements Comparable <Pergunta> {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -58,5 +59,24 @@ public class Pergunta {
 
     public Produto getProduto() {
         return produto;
+    }
+
+    @Override
+    public int compareTo(Pergunta o) {
+        return this.titulo.compareTo(o.titulo);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Pergunta)) return false;
+        Pergunta pergunta = (Pergunta) o;
+        return getTitulo().equals(pergunta.getTitulo()) &&
+                getUsuario().equals(pergunta.getUsuario()) && getProduto().equals(pergunta.getProduto());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getTitulo(), getUsuario(), getProduto());
     }
 }

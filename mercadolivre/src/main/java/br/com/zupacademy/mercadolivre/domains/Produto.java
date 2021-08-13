@@ -1,5 +1,6 @@
 package br.com.zupacademy.mercadolivre.domains;
 
+import br.com.zupacademy.mercadolivre.domains.treatments.Opinioes;
 import br.com.zupacademy.mercadolivre.dto.requests.CadastroCaracteristicaRequest;
 import io.jsonwebtoken.lang.Assert;
 
@@ -9,6 +10,7 @@ import javax.validation.constraints.*;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.*;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @Entity
@@ -51,6 +53,13 @@ public class Produto {
 
     @OneToMany(mappedBy = "produto", cascade = CascadeType.MERGE)
     private Set<ImagemProduto> imagens = new HashSet<>();
+
+    @OneToMany(mappedBy = "produto")
+    @OrderBy("titulo asc")
+    private SortedSet<Pergunta> perguntas = new TreeSet<>();
+
+    @OneToMany(mappedBy = "produto", cascade = CascadeType.MERGE)
+    private Set<Opiniao> opinioes = new HashSet<>();
 
     private LocalDate dataCadastro = LocalDate.now();
 
@@ -116,6 +125,43 @@ public class Produto {
 
     public Usuario getUsuario() {
         return usuario;
+    }
+
+    public String getNome() {
+        return nome;
+    }
+
+    public BigDecimal getValor() {
+        return valor;
+    }
+
+    public Integer getQuantidadeDisponivel() {
+        return quantidadeDisponivel;
+    }
+
+    public String getDescricao() {
+        return descricao;
+    }
+
+
+    public <T> Set<T> mapCaracteristicas(
+            Function<CaracteristicaProduto, T> funcaoMapeadora) {
+        return this.caracteristicas.stream().map(funcaoMapeadora)
+                .collect(Collectors.toSet());
+    }
+
+    public <T> Set<T> mapImagens(Function<ImagemProduto, T> funcaoMapeadora) {
+        return this.imagens.stream().map(funcaoMapeadora)
+                .collect(Collectors.toSet());
+    }
+
+    public <T extends Comparable<T>> SortedSet<T> mapPerguntas(Function<Pergunta, T> funcaoMapeadora) {
+        return this.perguntas.stream().map(funcaoMapeadora)
+                .collect(Collectors.toCollection(TreeSet::new));
+    }
+
+    public Opinioes getOpinioes() {
+        return new Opinioes(this.opinioes);
     }
 
     @Override
