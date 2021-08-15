@@ -7,4 +7,5 @@ import javax.validation.constraints.NotNull;
 public interface Send {
 
     void enviarEmail(@NotNull Pergunta pergunta);
+
 }

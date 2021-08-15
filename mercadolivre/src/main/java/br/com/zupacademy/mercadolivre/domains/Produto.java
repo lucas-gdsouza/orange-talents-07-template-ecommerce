@@ -2,6 +2,7 @@ package br.com.zupacademy.mercadolivre.domains;
 
 import br.com.zupacademy.mercadolivre.domains.treatments.Opinioes;
 import br.com.zupacademy.mercadolivre.dto.requests.CadastroCaracteristicaRequest;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.jsonwebtoken.lang.Assert;
 
 import javax.persistence.*;
@@ -160,6 +161,7 @@ public class Produto {
                 .collect(Collectors.toCollection(TreeSet::new));
     }
 
+    @JsonIgnore
     public Opinioes getOpinioes() {
         return new Opinioes(this.opinioes);
     }
@@ -187,5 +189,20 @@ public class Produto {
         } else if (!nome.equals(other.nome))
             return false;
         return true;
+    }
+
+    public boolean reduzirQuantidadeEstocada(Integer quantidadeDesejadaPeloComprador) {
+
+        Assert.notNull(quantidadeDesejadaPeloComprador,
+                "O parâmetro precisa ser preenchido para avaliação de estoque.");
+        Assert.isTrue(this.quantidadeDisponivel > 0,
+                "A quantidade deve ser superior a 0 para avaliação de estoque.");
+
+        if (this.quantidadeDisponivel >= quantidadeDesejadaPeloComprador) {
+            this.quantidadeDisponivel -= quantidadeDesejadaPeloComprador;
+            return true;
+        }
+
+        return false;
     }
 }
