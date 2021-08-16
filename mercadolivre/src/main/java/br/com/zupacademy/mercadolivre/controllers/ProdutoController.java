@@ -1,6 +1,6 @@
 package br.com.zupacademy.mercadolivre.controllers;
 
-import br.com.zupacademy.mercadolivre.components.EmailFake;
+import br.com.zupacademy.mercadolivre.components.Emails;
 import br.com.zupacademy.mercadolivre.components.UploaderFake;
 import br.com.zupacademy.mercadolivre.domains.Opiniao;
 import br.com.zupacademy.mercadolivre.domains.Pergunta;
@@ -36,7 +36,7 @@ public class ProdutoController {
     private UploaderFake uploaderFake;
 
     @Autowired
-    private EmailFake emailFake;
+    private Emails emails;
 
     @GetMapping(value = "/{id}")
     public DetalhesDoProdutoResponse capturarInformacoes(@PathVariable("id") Long id) {
@@ -100,10 +100,6 @@ public class ProdutoController {
     public ResponseEntity salvarOpinioes(@PathVariable("id") Long id, @RequestBody @Valid CadastroOpiniaoRequest request,
                                          @AuthenticationPrincipal Optional usuarioPrincipal) {
 
-        if (usuarioPrincipal.isEmpty()) {
-            throw new ResponseStatusException(HttpStatus.FORBIDDEN);
-        }
-
         Usuario usuario = (Usuario) usuarioPrincipal.get();
         Produto produto = manager.find(Produto.class, id);
 
@@ -123,10 +119,6 @@ public class ProdutoController {
                                           @RequestBody @Valid CadastroPerguntaRequest request,
                                           @AuthenticationPrincipal Optional usuarioPrincipal) {
 
-        if (usuarioPrincipal.isEmpty()) {
-            throw new ResponseStatusException(HttpStatus.FORBIDDEN);
-        }
-
         Usuario usuario = (Usuario) usuarioPrincipal.get();
         Produto produto = manager.find(Produto.class, id);
 
@@ -137,7 +129,7 @@ public class ProdutoController {
         Pergunta pergunta = request.toModel(usuario, produto);
         manager.persist(pergunta);
 
-        emailFake.enviarEmail(pergunta);
+        emails.novaPergunta(pergunta);
 
         return ResponseEntity.ok().build();
     }

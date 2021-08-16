@@ -1,7 +1,7 @@
 package br.com.zupacademy.mercadolivre.domains;
 
 import br.com.zupacademy.mercadolivre.domains.enums.GatewayPagamento;
-import br.com.zupacademy.mercadolivre.domains.enums.StatusCompra;
+import br.com.zupacademy.mercadolivre.dto.requests.impl.RetornoGatewayPagamento;
 import io.jsonwebtoken.lang.Assert;
 
 import javax.persistence.*;
@@ -9,6 +9,9 @@ import javax.validation.Valid;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Entity
 @Table(name = "Compras")
@@ -37,9 +40,8 @@ public class Compra {
     @Positive
     private Integer quantidadeDesejadaPeloComprador;
 
-    @Enumerated(EnumType.STRING)
-    @NotNull
-    private StatusCompra statusCompra;
+    @OneToMany(mappedBy = "compra", cascade = CascadeType.MERGE)
+    private Set<Transacao> transacoes = new HashSet<>();
 
     @Deprecated
     public Compra() {
@@ -47,24 +49,22 @@ public class Compra {
 
     public Compra(@NotNull @Valid Usuario comprador, @NotNull @Valid Produto produto,
                   @NotNull GatewayPagamento gatewayPagamento,
-                  @NotNull @Positive Integer quantidadeDesejadaPeloComprador, @NotNull StatusCompra statusCompra) {
+                  @NotNull @Positive Integer quantidadeDesejadaPeloComprador) {
 
-        validarArgumentos(comprador, produto, gatewayPagamento, quantidadeDesejadaPeloComprador, statusCompra);
+        validarArgumentos(comprador, produto, gatewayPagamento, quantidadeDesejadaPeloComprador);
         this.comprador = comprador;
         this.produto = produto;
         this.gatewayPagamento = gatewayPagamento;
         this.quantidadeDesejadaPeloComprador = quantidadeDesejadaPeloComprador;
-        this.statusCompra = statusCompra;
     }
 
     private void validarArgumentos(Usuario comprador, Produto produto, GatewayPagamento gatewayPagamento,
-                                   Integer quantidadeDesejadaPeloComprador, StatusCompra statusCompra) {
+                                   Integer quantidadeDesejadaPeloComprador) {
         Assert.notNull(comprador, "Argumento 'comprador' precisa ser preenchido.");
         Assert.notNull(produto, "Argumento 'produto' precisa ser preenchido.");
         Assert.notNull(gatewayPagamento, "Argumento 'gatewayPagamento' precisa ser preenchido.");
         Assert.isTrue(quantidadeDesejadaPeloComprador > 0,
                 "A quantidade requerida precisa ser maior que 0");
-        Assert.notNull(statusCompra, "Argumento 'statusPagamento' precisa ser preenchido.");
     }
 
     public Long getId() {
@@ -87,7 +87,31 @@ public class Compra {
         return quantidadeDesejadaPeloComprador;
     }
 
-    public StatusCompra getStatusCompra() {
-        return statusCompra;
+
+    /*Transação*/
+
+    public void adicionaTransacao(@Valid RetornoGatewayPagamento request) {
+        Transacao novaTransacao = request.toTransacao(this);
+
+        Assert.state(!this.transacoes.contains(novaTransacao),
+                "Atenção! Já existe uma transação validada!"
+                        + novaTransacao);
+        Assert.state(transacoesConcluidasComSucesso().isEmpty(), "Atenção - Compra já concluída!");
+
+        this.transacoes.add(novaTransacao);
+    }
+
+    private Set<Transacao> transacoesConcluidasComSucesso() {
+        Set<Transacao> transacoesConcluidasComSucesso = this.transacoes.stream()
+                .filter(Transacao::concluidaComSucesso)
+                .collect(Collectors.toSet());
+
+        Assert.isTrue(transacoesConcluidasComSucesso.size() <= 1, "O ID está em uso mais de uma vez.");
+
+        return transacoesConcluidasComSucesso;
+    }
+
+    public boolean processadaComSucesso() {
+        return !transacoesConcluidasComSucesso().isEmpty();
     }
 }

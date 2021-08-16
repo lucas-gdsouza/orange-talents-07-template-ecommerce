@@ -5,7 +5,6 @@ import br.com.zupacademy.mercadolivre.domains.Compra;
 import br.com.zupacademy.mercadolivre.domains.Produto;
 import br.com.zupacademy.mercadolivre.domains.Usuario;
 import br.com.zupacademy.mercadolivre.domains.enums.GatewayPagamento;
-import br.com.zupacademy.mercadolivre.domains.enums.StatusCompra;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -49,6 +48,6 @@ public class NovaCompraRequest {
 
     public Compra toModel(Usuario comprador, Produto produto) {
         return new Compra(comprador, produto, this.gatewayPagamento,
-                this.quantidadeDesejadaPeloComprador, StatusCompra.INICIADA);
+                this.quantidadeDesejadaPeloComprador);
     }
 }
